@@ -104,15 +104,19 @@ surveys %>%
 
 # Hint: think about how the commands should be ordered to produce this data frame!
 
-Place answers below
+# Place answers below
 
 new_dataframe <- surveys %>% 
   filter(!is.na(hindfoot_length)) %>% 
   mutate(hindfoot_cm = hindfoot_length / 10) %>% 
   select(species_id, hindfoot_cm) %>% 
-  filter(hindfoot_cm < 3))
+  filter(hindfoot_cm < 3)
 
-surveys %>% (  filter(!is.na(hindfoot_length)) %>% (  mutate(hindfoot_cm = hindfoot_length / 10) %>% (  filter(hindfoot_cm < 3) %>% (  select(species_id, hindfoot_cm)
+surveys %>% 
+  filter(!is.na(hindfoot_length)) %>% 
+  mutate(hindfoot_cm = hindfoot_length / 10) %>%
+  filter(hindfoot_cm < 3) %>% 
+  select(species_id, hindfoot_cm)
 
 new_dataframe <- surveys %>% 
   filter(!is.na(hindfoot_length), hindfoot_length < 30) %>% 
