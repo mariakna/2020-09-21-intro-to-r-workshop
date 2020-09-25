@@ -92,7 +92,6 @@ yearly_counts_graph <- surveys_complete %>%
   geom_line()
 yearly_counts_graph
 
-# challenge 9
 ggplot(data = yearly_counts, aes(x = year, y = n)) +
   geom_line() +
   facet_wrap(facets = vars(genus))
@@ -107,4 +106,84 @@ yearly_sex_counts <- surveys_complete %>%
 
 ggplot(data = yearly_sex_counts, mapping = aes(x = year, y = n, color = sex)) +
   geom_line() +
-  facet_wrap(facets =  vars(genus))
+  facet_wrap(facets =  vars(genus), ncol = 2)
+
+# One column, facet by rows
+ggplot(data = yearly_sex_counts, 
+       mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_grid(rows = vars(genus))
+
+# One row, facet by column
+ggplot(data = yearly_sex_counts, 
+       mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_grid(cols = vars(genus))
+
+ggplot(data = yearly_sex_counts, 
+       mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_grid(rows = vars(sex), cols = vars(genus))
+
+# challenge 9
+ggplot(data = yearly_sex_counts, 
+       mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_grid(cols = vars(genus))
+
+# themes
+ggplot(data = yearly_sex_counts, 
+       mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_wrap(vars(genus)) +
+  theme_bw()
+
+# challenge 10
+# create a plot that depicts how the 
+# average weight of each species changes through the years.
+#
+# Hint: need to do a group_by() and summarize() to get the data
+# before plotting
+
+yearly_weight <- surveys_complete %>%
+  group_by(year, species_id) %>%
+  summarize(avg_weight = mean(weight))
+
+yearly_weight %>%
+ggplot(aes(x=year, y=avg_weight, color = species_id)) +
+  geom_line() +
+  facet_wrap(~species_id) +
+  theme_classic()
+
+# more customisation
+yearly_sex_counts %>%
+  ggplot(aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_wrap(~genus) +
+  labs(title = "Observed genera through time",
+       x = "Year of observation",
+       y = "Number of individuals") +
+  theme_classic() +
+  theme(text = element_text(size = 12),
+        axis.text.x = element_text(color = "grey20", size = 10, angle = 90, hjust = 0.5, vjust = 0.5),
+        axis.text.y = element_text(color = "grey20", size = 10),
+        strip.text = element_text(face = "italic"))
+    
+grey_theme <- theme(text = element_text(size = 12),
+                    axis.text.x = element_text(color = "grey20", size = 10, angle = 90, hjust = 0.5, vjust = 0.5),
+                    axis.text.y = element_text(color = "grey20", size = 10),
+                    strip.text = element_text(face = "italic"))
+
+yearly_sex_counts %>%
+  ggplot(aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_wrap(~genus) +
+  labs(title = "Observed genera through time",
+       x = "Year of observation",
+       y = "Number of individuals") +
+  theme_classic() + grey_theme
+
+# exporting a plot
+
+# default - saves the last plot that was generated
+ggsave("figures/my_plot.pdf", width = 15, height = 10, dpi = 300)
